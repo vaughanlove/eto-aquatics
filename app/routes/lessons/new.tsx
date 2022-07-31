@@ -2,10 +2,18 @@ import type { ActionFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 
 import { db } from "~/utils/db.server";
+import { requireUserAdmin } from "~/utils/session.server";
+
 
 export const action: ActionFunction = async ({
   request,
 }) => {
+  const isAdmin = await requireUserAdmin(request);
+  console.log(isAdmin)
+  if (!isAdmin) {
+    throw new Error("User is not administrator and cannot make new bookings.")
+  }
+
   const form = await request.formData();
   const name = form.get("name");
   const description = form.get("description");
