@@ -11,6 +11,15 @@ async function seed() {
         }
     });
 
+    await db.user.create({
+      data: {
+          username: "testuser",
+          // twixrox hashed
+          passwordHash: "$2b$10$K7L1OJ45/4Y2nIvhRVpCe.FSmhDdWoXehVzJptJ/op0lSsvqNu/1u",
+          isAdmin: false
+      }
+  });
+
   await Promise.all(
     getLessons().map((lesson) => {
       return db.lesson.create({ data: lesson });

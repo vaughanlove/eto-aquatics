@@ -1,6 +1,6 @@
 @font-face {
-    font-family: "baloo";
-    src: url("/fonts/baloo/baloo.woff") format("woff");
+    font-family: "Mochiy Pop One";
+    src: url("/fonts/MochiyPopOne-Regular.tff") format("tff");
     font-weight: normal;
     font-style: normal;
   }
@@ -8,16 +8,16 @@
   :root {
     --hs-links: 48 100%;
     --color-foreground: hsl(0, 0%, 100%);
-    --color-background: hsl(270, 1%, 47%);
-    --color-links: hsl(var(--hs-links) 50%);
+    --color-background: hsl(200, 40%, 81%);
+    --color-links: hsl(204, 38%, 37%);
     --color-links-hover: hsl(var(--hs-links) 45%);
     --color-border: hsl(276, 58%, 89%);
     --color-invalid: hsl(356, 100%, 71%);
-    --gradient-background:hsl(0, 0%, 100%);
-    --font-body: -apple-system, "Segoe UI", Helvetica Neue, Helvetica,
+    --gradient-background:hsl(0, 66%, 46%);
+    --font-body: "Mochiy Pop One" -apple-system, "Segoe UI", Helvetica Neue, Helvetica,
       Roboto, Arial, sans-serif, system-ui, "Apple Color Emoji",
       "Segoe UI Emoji";
-    --font-display: baloo, var(--font-body);
+    --font-display: MochiyPopOne, var(--font-body);
   }
   
   html {
