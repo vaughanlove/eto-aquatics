@@ -1,19 +1,35 @@
-import type { LinksFunction } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import type { LoaderFunction, LinksFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Outlet, Link, useLoaderData } from "@remix-run/react";
+import type { Certification } from "@prisma/client";
 
-import stylesUrl from "~/styles/global.css";
+import styles from "../styles/app.css"
 
-export const links: LinksFunction = () => {
-    return [{ rel: "stylesheet", href: stylesUrl }];
+import { db } from "~/utils/db.server";
+import { requireUserAdmin } from "~/utils/session.server";
+
+type LoaderData = {
+    isAdmin: Awaited<ReturnType<typeof requireUserAdmin>>;
+}
+
+export const loader: LoaderFunction = async ({request}) => {
+    const isAdmin = await requireUserAdmin(request);
+
+const data: LoaderData = {
+    isAdmin,
+};
+return json(data);
 };
 
-
 export default function AdminRoute() {
+    const data = useLoaderData<LoaderData>();
     return (
-        <div className="container">
-            <h1>ADMIN</h1>
-            <Link to="../lessons"> View All Lessons </Link>
-            <Link to="../lessons/new"> Add New Lesson </Link>
+        <div>
+            {data.isAdmin ? 
+            (<div className="bg-black">
+                <Outlet />
+            </div>
+            ) : (<Link to="/login">Login</Link>)} 
         </div>
     )
 }

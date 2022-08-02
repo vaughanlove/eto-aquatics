@@ -16,7 +16,7 @@ export default function App() {
       </head>
       <body>
         <h1 className="text-3xl font-bold underline">
-          Hello world!
+          Eto Swim Academy
         </h1>
         <Outlet />
         <LiveReload />

@@ -1,14 +1,14 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, Link, useLoaderData } from "@remix-run/react";
-import type { Lesson } from "@prisma/client";
+import type { Certification } from "@prisma/client";
 
 import { db } from "~/utils/db.server";
 
 import { getUser } from "~/utils/session.server";
 
 type LoaderData = {
-   lessons: Array<Lesson>;
+   certs: Array<Certification>;
    user: Awaited<ReturnType<typeof getUser>>;
 };
 
@@ -17,11 +17,11 @@ export const loader: LoaderFunction = async ({request}) => {
   const user = await getUser(request);
 
   const data: LoaderData = {
-      lessons: await db.lesson.findMany(),
-      user,
-    };
-    return json(data);
+    certs: await db.certification.findMany(),
+    user,
   };
+  return json(data);
+};
 
 export default function LessonsRoute() {
     const data = useLoaderData<LoaderData>();
@@ -59,7 +59,7 @@ export default function LessonsRoute() {
         <div className="container">
           <div>
             <ul>
-                {data.lessons.map((lesson) => (<li key={lesson.id}><Link to={lesson.id}>{lesson.name} </Link></li>
+                {data.certs.map((cert) => (<li key={cert.id}><Link to={cert.id}>{cert.name} </Link></li>
                 ))}
             </ul>
           </div>
