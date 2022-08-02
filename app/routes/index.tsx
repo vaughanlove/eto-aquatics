@@ -1,15 +1,9 @@
-import type { LinksFunction } from "@remix-run/node";
 import { Link } from "@remix-run/react";
 
-import stylesUrl from "~/styles/global.css";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }];
-};
 export default function IndexRoute() {
     return (
         <div className="container">
-          <div className="content">
+          <div>
             <h1>
               <span>Eto Swim Academy!</span>
             </h1>              

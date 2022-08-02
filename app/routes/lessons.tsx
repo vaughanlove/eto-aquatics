@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, Link, useLoaderData } from "@remix-run/react";
 import type { Lesson } from "@prisma/client";
@@ -6,17 +6,12 @@ import type { Lesson } from "@prisma/client";
 import { db } from "~/utils/db.server";
 
 import { getUser } from "~/utils/session.server";
-import stylesUrl from "~/styles/global.css";
 
 type LoaderData = {
    lessons: Array<Lesson>;
    user: Awaited<ReturnType<typeof getUser>>;
 };
 
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: stylesUrl }];
-};
 
 export const loader: LoaderFunction = async ({request}) => {
   const user = await getUser(request);
