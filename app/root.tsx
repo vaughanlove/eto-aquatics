@@ -1,39 +1,23 @@
 import { Links, LiveReload, Outlet } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import styles from "./styles/app.css"
 
-import globalStylesUrl from "./styles/global.css";
-import globalMediumStylesUrl from "./styles/global-medium.css";
-import globalLargeStylesUrl from "./styles/global-large.css";
-
-export const links: LinksFunction = () => {
-  return [
-    {
-      rel: "stylesheet",
-      href: globalStylesUrl,
-    },
-    {
-      rel: "stylesheet",
-      href: globalMediumStylesUrl,
-      media: "print, (min-width: 640px)",
-    },
-    {
-      rel: "stylesheet",
-      href: globalLargeStylesUrl,
-      media: "screen and (min-width: 1024px)",
-    },
-  ];
-};
+export let links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: styles }]
+}
 
 export default function App() {
   return (
     <html lang="en">
       <head>
+        <Links />
         <meta charSet="utf-8" />
         <title>Eto Swim Academy</title>
-        <Links />
-
       </head>
       <body>
+        <h1 className="text-3xl font-bold underline">
+          Hello world!
+        </h1>
         <Outlet />
         <LiveReload />
       </body>
