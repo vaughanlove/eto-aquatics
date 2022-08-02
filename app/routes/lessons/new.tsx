@@ -1,18 +1,26 @@
-import type { ActionFunction } from "@remix-run/node";
+import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+
 
 import { db } from "~/utils/db.server";
 import { requireUserAdmin } from "~/utils/session.server";
 
+type LoaderData = {
+  isAdmin: Awaited<ReturnType<typeof requireUserAdmin>>;
+}
+
+export const loader: LoaderFunction  = async ({request}) => {
+  const isAdmin = await requireUserAdmin(request);
+  const data: LoaderData = {
+    isAdmin
+  }
+  return json(data);
+}
 
 export const action: ActionFunction = async ({
   request,
 }) => {
-  const isAdmin = await requireUserAdmin(request);
-  console.log(isAdmin)
-  if (!isAdmin) {
-    throw new Error("User is not administrator and cannot make new bookings.")
-  }
 
   const form = await request.formData();
   const name = form.get("name");
@@ -46,7 +54,6 @@ export const action: ActionFunction = async ({
     throw new Error(`Form not submitted correctly.`);
   }
 
-  console.log("here")
   const fields = { name, description, availableSpots, instructor, lowerAge, upperAge, recurringDate, classMinuteDuration, totalDurationHours, lessonCost, prerequisite };
   console.log(fields)
   const lesson = await db.lesson.create({ data: fields });
@@ -54,9 +61,12 @@ export const action: ActionFunction = async ({
 };
 
 export default function NewLessonRoute() {
+  const data = useLoaderData<LoaderData>();
+
   return (
     <div>
-      <p>Make your lesson</p>
+      {data.isAdmin ?
+      (
       <form method="post">
         <div>
           <label>
@@ -119,7 +129,10 @@ export default function NewLessonRoute() {
             Add
           </button>
         </div>
-      </form>
+      </form> ) : (
+            <Link to="/login">Login</Link>
+          )
+    }
     </div>
   );
 }
