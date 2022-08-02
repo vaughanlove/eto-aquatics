@@ -14,17 +14,40 @@ model Lesson {
   id String @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  name String
-  description String
+  award Certification @relation(fields: [certificationId], references: [id])
+  certificationId String
+  takenBy User @relation(fields: [certificationId], references: [id])
+  times Timeslot[]
   availableSpots Int
   instructor String?
-  lowerAge Int
-  upperAge Int
-  recurringDate DateTime
-  classMinuteDuration Int
-  totalDurationHours Int
-  lessonCost Int
-  prerequisite String
+  classMinutes Int
+  totalHours Int
+  lessonCost Float
+}
+
+model Timeslot {
+  id String @id @default(uuid())
+  for Lesson @relation(fields: [lessonId], references: [id])
+  start DateTime
+  end DateTime
+  lessonId String
+}
+
+model Certification {
+  id String @id @default(uuid())
+  name String
+  description String
+  taughtIn Lesson[]
+  prerequisiteFor Prerequisite[] @relation("for")
+  prerequisites Prerequisite[] @relation("need")
+}
+
+model Prerequisite {
+  for Certification @relation("for", fields: [forId], references: [id])
+  forId String
+  need Certification @relation("need", fields: [needId], references: [id])
+  needId String
+  @@id([forId, needId])
 }
 
 model User {
@@ -32,7 +55,9 @@ model User {
   username     String   @unique
   passwordHash String
   isAdmin Boolean @default(false)
+  classes Lesson[]
 }
+
 
 // model Parent {
 //   id String @id @default(uuid())
