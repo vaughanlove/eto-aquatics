@@ -55,7 +55,6 @@ export const action: ActionFunction = async ({
   }
 
   const fields = { name, description, availableSpots, instructor, lowerAge, upperAge, recurringDate, classMinuteDuration, totalDurationHours, lessonCost, prerequisite };
-  console.log(fields)
   const lesson = await db.lesson.create({ data: fields });
   return redirect(`/lessons/${lesson.id}`);
 };
