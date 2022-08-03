@@ -5,24 +5,14 @@ import type { Certification } from "@prisma/client";
 
 import { db } from "~/utils/db.server";
 
-type LoaderData = {
-  certs: Array<Certification>
-}
-
-export const loader: LoaderFunction = async ({request}) => {
-  const data: LoaderData = {
-    certs: await db.certification.findMany(),
-  };
-  return json(data);
-};
-
 export default function AdminIndexRoute() {
-  const data = useLoaderData<LoaderData>();
 
   return (
     <div className="container">
       <h1>Admin Dashboard</h1>
-      {data.certs.map((cert) => (<div key={cert.id}><Link to={"cert/"+cert.id}>{cert.name} </Link></div>))}
+      <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
+        <Link to="/admin/cert" className="text-xl underline"> Certifications </Link>
+      </div>     
     </div>
   );
 }
