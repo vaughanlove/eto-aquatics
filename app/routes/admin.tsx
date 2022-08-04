@@ -3,8 +3,6 @@ import { json } from "@remix-run/node";
 import { Outlet, Link, useLoaderData } from "@remix-run/react";
 import type { Certification } from "@prisma/client";
 
-import styles from "../styles/app.css"
-
 import { db } from "~/utils/db.server";
 import { requireUserAdmin } from "~/utils/session.server";
 
@@ -26,7 +24,8 @@ export default function AdminRoute() {
     return (
         <div>
             {data.isAdmin ? 
-            (<div className="bg-black">
+            (
+            <div className="bg-red">
                 <Outlet />
             </div>
             ) : (<Link to="/login">Login</Link>)} 
