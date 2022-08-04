@@ -1,17 +1,19 @@
 import type { LoaderFunction, ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, Link, useLoaderData } from "@remix-run/react";
-import type { Certification } from "@prisma/client";
+import type { Certification, Lesson } from "@prisma/client";
 
 import { db } from "~/utils/db.server";
 
 type LoaderData = {
-    certs: Array<Certification>
+    certs: Array<Certification>,
+    lessons: Array<Lesson>,
 }
   
 export const loader: LoaderFunction = async ({request}) => {
 const data: LoaderData = {
     certs: await db.certification.findMany(),
+    lessons: await db.lesson.findMany({include: {award: true}}),
 };
 return json(data);
 };
@@ -37,7 +39,7 @@ export const action: ActionFunction = async ({
     await db.prerequisite.create({ data: fields });
     console.log("success!")
 
-  };
+};
   
 
 export default function CertIndexRoute() {
@@ -45,24 +47,14 @@ export default function CertIndexRoute() {
 
     return (
       <div className="container">
-        <h1>View/Add/Edit certifications</h1>
-        {data.certs.map((cert) => (<div key={cert.id}><Link to={"cert/"+cert.id}>{cert.name} </Link>|| {cert.id}</div>))} 
-        <div>
-            <form method="post">
-                <div>
-                    <label>
-                        Name: <input type="text" placeholder="first class" name="first"/>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        Description: <input type="text" placeholder="second class" name="second" />
-                    </label>
-                </div>
-                <div>
-                    <button type="submit">add prereq</button>
-                </div>
-            </form>
+        <h1 className="text-xl p-12">View/Add/Edit certifications</h1>
+        <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl space-y-2">
+          {data.certs.map((cert) => (<div className="rounded-md p-5 shadow-md bg-blue-200" key={cert.id}>{cert.name}<Link className="text-right" to={cert.id}> EDIT</Link></div>))} 
+        </div>
+
+        <h1 className="text-xl p-12">Current Lessons</h1>
+        <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl space-y-2">
+          {data.lessons.map((cert) => (<div className="rounded-md p-5 shadow-md bg-blue-200" key={cert.id}>{cert.award.name}<Link className="text-right" to={cert.id}> EDIT</Link></div>))} 
         </div>
 
       </div>

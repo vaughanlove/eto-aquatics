@@ -9,9 +9,9 @@ export default function AdminIndexRoute() {
 
   return (
     <div className="container">
-      <h1>Admin Dashboard</h1>
+      <h1 className="text-xl font-medium p-12">Admin Dashboard</h1>
+      <Link className="text-l p-12 text-red-500" to="/admin/cert"> Edit Certifications</Link>
       <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
-        <Link to="/admin/cert" className="text-xl underline"> Certifications </Link>
       </div>     
     </div>
   );
