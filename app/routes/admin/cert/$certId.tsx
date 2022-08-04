@@ -5,7 +5,7 @@ import type { Certification } from "@prisma/client";
 import { db } from "~/utils/db.server";
 import CertIndexRoute from ".";
 
-type LoaderData = { cert: Certification, addPrereq: Boolean };
+type LoaderData = { cert: Certification, certs: Array<Certification>, addPrereq: Boolean };
 
 
 export const loader: LoaderFunction = async ({
@@ -19,7 +19,7 @@ export const loader: LoaderFunction = async ({
 
   const addPrereq = false  
   if (!cert) throw new Error("Lesson not found");
-  const data: LoaderData = { cert, addPrereq };
+  const data: LoaderData = { cert, certs: await db.certification.findMany(), addPrereq };
   return json(data);
 };
 
@@ -28,10 +28,14 @@ export const action: ActionFunction = async ({
 }) => {
 
   const form = await request.formData();
+
   const inputType = form.get("input_type")
   const first = form.get("first");
   const second = form.get("second");
-  console.log("here")
+  console.log(inputType)
+  console.log(first)
+  console.log(second)
+
   // we do this type check to be extra sure and to make TypeScript happy
   // we'll explore validation next!
   if (
@@ -43,10 +47,14 @@ export const action: ActionFunction = async ({
 
   switch(inputType){
     case "add_prereq": {
+      console.log("add")
       await db.certification.update({data: {prereqFor: {connect: {id: first}}}, where: {id: second}}) 
+      return null
     }
     case "remove_prereq": {
+      console.log("here")
       await db.certification.update({data: {prereqFor: {disconnect: {id: first}}}, where: {id: second}})
+      return null
     }
   }
 
@@ -85,17 +93,15 @@ export default function LessonRoute() {
         <div>
             <form method="post">
                 <input type="hidden" name="input_type" value="add_prereq"/>
-
+                <input type="hidden" name="first" value={data.cert.id}/>
                 <div>
-                    <input type="hidden" name="first" value={data.cert.id}/>
+                    Pick a prerequisite:  
+                    <select id="second" name="second">
+                        {data.certs.map((c) => (<option key={c.id} value={c.id}> {c.name} </option>))}
+                    </select>
                 </div>
                 <div>
-                    <label>
-                        Pick a prerequisite <input type="text" placeholder="second class" name="second" />
-                    </label>
-                </div>
-                <div>
-                    <button type="submit">add prereq</button>
+                    <button type="submit" className="bg-blue-200 underline">add prereq</button>
                 </div>
             </form>
         </div>
