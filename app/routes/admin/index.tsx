@@ -19,15 +19,16 @@ export default function AdminIndexRoute() {
   const data = useLoaderData<LoaderData>();
 
   return (
-    <div className="container">
+    <div className="container p-12">
       <div>
-        <h1 className="text-xl font-medium p-12">Admin Dashboard</h1>
-        <Link className="text-l p-12 text-red-500" to="/admin/cert"> Edit Certifications</Link>
+        <h1 className="text-xl font-medium ">Admin Dashboard</h1>
+        <Link className="text-l  text-red-500" to="/admin/cert"> Edit Certifications</Link>
       </div>
-      <h1 className="text-xl p-12">Current Lessons</h1>
-        <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl space-y-2">
-          {data.lessons.map((lesson) => (<div className="rounded-md p-5 shadow-md bg-blue-200" key={lesson.id}>{lesson.award.name}<br></br> Times {lesson.times.map((timeslot)=> (<p key={timeslot.id}>{timeslot.start}</p>))}<Link className="text-right" to={"lessons/"+lesson.id}> EDIT</Link></div>))} 
-        </div>   
+      <h1 className="text-xl ">Current Lessons</h1>
+      <button><Link to="/admin/lessons/new">New Lesson</Link></button>
+      <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl space-y-2">
+        {data.lessons.map((lesson) => (<div className="rounded-md p-5 shadow-md bg-blue-200" key={lesson.id}>{lesson.award.name}<br></br> Times {lesson.times.map((timeslot)=> (<p key={timeslot.id}>{timeslot.start}</p>))}<Link className="text-right" to={"lessons/"+lesson.id}> EDIT</Link></div>))} 
+      </div>   
     </div>
   );
 }
