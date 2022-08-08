@@ -32,9 +32,7 @@ export const action: ActionFunction = async ({
   const inputType = form.get("input_type")
   const first = form.get("first");
   const second = form.get("second");
-  console.log(inputType)
-  console.log(first)
-  console.log(second)
+
 
   // we do this type check to be extra sure and to make TypeScript happy
   // we'll explore validation next!
