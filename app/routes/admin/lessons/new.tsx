@@ -1,6 +1,7 @@
 import { ActionFunction, json, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import type { Certification } from "@prisma/client";
 
 
 import { db } from "~/utils/db.server";
@@ -8,12 +9,14 @@ import { requireUserAdmin } from "~/utils/session.server";
 
 type LoaderData = {
   isAdmin: Awaited<ReturnType<typeof requireUserAdmin>>;
+  certs: Array<Certification>;
 }
 
 export const loader: LoaderFunction  = async ({request}) => {
   const isAdmin = await requireUserAdmin(request);
   const data: LoaderData = {
-    isAdmin
+    isAdmin,
+    certs: await db.certification.findMany()
   }
   return json(data);
 }
@@ -23,12 +26,14 @@ export const action: ActionFunction = async ({
 }) => {
 
   const form = await request.formData();
+  const certificationId = form.get("certId");
   const availableSpots = parseInt(form.get("availableSpots"));
   const instructor = form.get("instructor");
-  const classMinutes = parseInt(form.get("classMinuteDuration"));
-  const totalHours = parseInt(form.get("totalDurationHours"));
+  const classMinutes = parseInt(form.get("classMinutes"));
+  const totalHours = parseInt(form.get("totalHours"));
   const lessonCost = parseInt(form.get("lessonCost"));
 
+  console.log(classMinutes)
   // we do this type check to be extra sure and to make TypeScript happy
   // we'll explore validation next!
   if (
@@ -37,13 +42,12 @@ export const action: ActionFunction = async ({
     typeof totalHours !== "number" ||
     typeof lessonCost !== "number"
   ) {
-    console.log()
     throw new Error(`Form not submitted correctly.`);
   }
 
-  const fields = {availableSpots, instructor, classMinutes, totalHours, lessonCost };
+  const fields = {availableSpots, instructor, classMinutes, totalHours, lessonCost, certificationId };
   const lesson = await db.lesson.create({ data: fields });
-  return redirect(`admin/lessons/${lesson.id}`);
+  return redirect(`${lesson.id}`);
 };
 
 export default function NewLessonRoute() {
@@ -55,9 +59,10 @@ export default function NewLessonRoute() {
       (
       <form method="post">
         <div>
-          <label>
-            Award: <input type="text" name="award" />
-          </label>
+          Pick Award:
+           <select name="certId">
+              {data.certs.map((c) => (<option key={c.id} value={c.id}> {c.name} </option>))}
+            </select>
         </div>
         <div>
           <label>

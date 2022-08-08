@@ -14,7 +14,8 @@ export const loader: LoaderFunction = async ({
      await db.lesson.findUnique({
       where: {id: params.lessonId},
       include: {
-        award: true
+        award: true,
+        times: true,
       }
   });
   if (!lesson) throw new Error("Lesson not found");
@@ -92,6 +93,7 @@ export default function LessonRoute() {
         </div>
       </form>
         <Link to={"/"}> Home </Link>
+        {data.lesson.times.map((timeslot) => (<div>{timeslot.start} - {timeslot.end}</div>))}
       </div>
     );
   }

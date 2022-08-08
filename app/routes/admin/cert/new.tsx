@@ -33,7 +33,7 @@ export const action: ActionFunction = async ({
 export default function NewLessonRoute() {
 
   return (
-    <div>       
+    <div className="container p-12">       
       <form method="post">
         <div>
           <label>
