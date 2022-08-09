@@ -52,7 +52,7 @@ export const action: ActionFunction = async ({
 
   switch(input_type){
     case "createLesson": {
-      await db.lesson.update({data: {availableSpots: availableSpots, instructor: instructor, classMinutes: classMinutes,totalHours: totalHours, lessonCost: lessonCost}, where: {id: lessonId}, select: {id: true}})
+      let lesson = await db.lesson.update({data: {availableSpots: availableSpots, instructor: instructor, classMinutes: classMinutes,totalHours: totalHours, lessonCost: lessonCost}, where: {id: lessonId}, select: {id: true}})
       return redirect(`/admin/lessons/${lesson.id}`);
     }
     case "removeLesson": {
@@ -69,66 +69,137 @@ export const action: ActionFunction = async ({
 
 export default function LessonRoute() {
     const data = useLoaderData<LoaderData>();
+    const formatDate = (dateString: string) => {
+      return new Date(dateString).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" })
+    }
     return (
-      <div>
-        <form method="post">
-          <input type="hidden" name="input_type" value="createLesson"/>
+      <div className="container  mx-auto">
+        <h1 className="text-2xl"> Editing Lesson {data.lesson.id}</h1>
+        <div className="container flex">
+          <form method="post" className="">
+            <input type="hidden" name="input_type" value="createLesson"/>
 
-          <div>
-            <label>
-            <input type="hidden" name="lessonId" defaultValue={data.lesson.id} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Available Spots: <input type="text" name="availableSpots" defaultValue={data.lesson.availableSpots} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Instructor: <input type="text" name="instructor" defaultValue={data.lesson.instructor} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Class Minutes: <input type="text" name="classMinutes" defaultValue={data.lesson.classMinutes} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Total Hours: <input type="text" name="totalHours" defaultValue={data.lesson.totalHours} />
-            </label>
-          </div>
-          <div>
-            <label>
-              Lesson Cost: <input type="text" name="lessonCost" defaultValue={data.lesson.lessonCost} />
-            </label>
-          </div>
-          <div>
-            <button type="submit" className="bg-green-200">
-              Update
-            </button>
-          </div>
-        </form>
-        {data.lesson.times.map((timeslot) => 
-        (<div>{timeslot.start} - {timeslot.end} 
-          <form method="post">
-            <input type="hidden" name="input_type" value="removeLesson"/>
-            <input type="hidden" name="timeslotId" value={timeslot.id}/>
-            <button type="submit">
-              Remove Time
-            </button>
+            <div>
+              <label>
+              <input type="hidden" name="lessonId" defaultValue={data.lesson.id} />
+              </label>
+            </div>
+            <div className="px-4 py-3">
+              Available Spots: 
+              <div>
+                <label>
+                  <input className="
+                      mt-0
+                      block
+                      px-0.5
+                      border-0 border-b-2 border-gray-200
+                      focus:ring-0 focus:border-black
+                    " type="text" name="availableSpots" defaultValue={data.lesson.availableSpots} />
+                </label>
+              </div>
+            </div>
+            <div className="px-4 py-3">
+              Instructor: 
+              <div>
+                <label>
+                  <input className="
+                      mt-0
+                      block
+                      px-0.5
+                      border-0 border-b-2 border-gray-200
+                      focus:ring-0 focus:border-black" type="text" name="instructor" defaultValue={data.lesson.instructor} />
+                </label>
+              </div>
+            </div>
+            <div className="px-4 py-3">
+            Class Minutes: 
+              <div>
+                <label>
+                  <input className="
+                      mt-0
+                      block
+                      px-0.5
+                      border-0 border-b-2 border-gray-200
+                      focus:ring-0 focus:border-black
+                    " type="text" name="classMinutes" defaultValue={data.lesson.classMinutes} />
+                </label>
+              </div>
+            </div>
+            <div className="px-4 py-3">
+              Total Hours: 
+              <div>
+                <label>
+                  <input className="
+                      mt-0
+                      block
+                      px-0.5
+                      border-0 border-b-2 border-gray-200
+                      focus:ring-0 focus:border-black
+                    " type="text" name="totalHours" defaultValue={data.lesson.totalHours} />
+                </label>
+              </div>
+            </div>
+            <div className="px-4 py-3">
+              Lesson Cost ($): 
+              <div>
+                <label>
+                  <input className="
+                      mt-0
+                      block
+                      px-0.5
+                      border-0 border-b-2 border-gray-200
+                      focus:ring-0 focus:border-black
+                    " type="text" name="lessonCost" defaultValue={data.lesson.lessonCost} />
+                </label>
+              </div>
+            </div>
+            <div className="px-4 py-3">
+              <button type="submit" className="text-sm font-medium bg-green-200 px-6 py-2 rounded-full">
+                Update
+              </button>
+            </div>
           </form>
-        </div>))}
-        <form method="post">
-          <input type="hidden" name="lessonId" defaultValue={data.lesson.id} />
-          <input type="hidden" name="input_type" value="addLessonTime"/>
-          <input type="datetime-local" name="start" />
-          <input type="datetime-local" name="end"/>
-          <button type="submit">
-            Add Time
-          </button>
-        </form>
+          
+          <div className="p-4">
+            <h1 className="text-xl">Times</h1>
+            {data.lesson.times.map((timeslot) => 
+            (<div  className="container flex p-2 items-center" key={timeslot.id}>{formatDate(timeslot.start)} - {formatDate(timeslot.end)} 
+              <form method="post">
+                <input type="hidden" name="input_type" value="removeLesson"/>
+                <input type="hidden" name="timeslotId" value={timeslot.id}/>
+                <button className="rounded bg-red-300 py-1 px-3 mx-12" type="submit">
+                  X
+                </button>
+              </form>
+            </div>))}
+            <form method="post" className="container items-center mx-auto">
+              <input type="hidden" name="lessonId" defaultValue={data.lesson.id} />
+              <input type="hidden" name="input_type" value="addLessonTime"/>
+              <input className="
+                    mt-1
+                    block
+                    rounded-md
+                    bg-gray-100
+                    border-transparent
+                    focus:border-gray-500 focus:bg-white focus:ring-0
+                  " type="datetime-local" name="start" />
+              <input className="
+                    mt-1
+                    block
+                    rounded-md
+                    bg-gray-100
+                    border-transparent
+                    focus:border-gray-500 focus:bg-white focus:ring-0
+                  " type="datetime-local" name="end"/>
+              <button className="text-sm font-medium bg-green-200 px-6 py-2 my-2 rounded-full" type="submit">
+                Add Time
+              </button>
+            </form>
+          </div>
+          <div>
+            <h1 className="text-xl">Invoices (todo)</h1>
+          </div>
+        </div>
       </div>
     );
   }
