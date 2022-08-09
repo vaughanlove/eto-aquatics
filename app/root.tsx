@@ -8,29 +8,22 @@ export let links: LinksFunction = () => {
 
 export default function App() {
   return (
-    <html lang="en">
+    <html lang="en" className="">
       <head>
         <Links />
         <meta charSet="utf-8" />
         <title>Eto Swim Academy</title>
       </head>
-      <div className="p-6 max-w mx-auto bg-white shadow-md flex items-center space-x-4">
-        <div>
-          <div className="text-xl font-medium text-black"> <Link to={"/"}> Eto Swim Academy </Link></div>
+      <div className="container text-center p-12 mx-auto">
+        <Link className="font-medium text-3xl" to={"/"}> Eto Swim Academy </Link>
+        <div className="container shadow-sm space-x-8 p-6">
+          <Link to="team" className="text-md text-black"> Our Team </Link>
+          <Link to="lessons" className="text-md  text-black"> Lessons </Link>
+          <Link to="admin" className="text-md text-black"> Admin </Link>
         </div>
       </div>
-      <div className="m-6 p-6 max-w mx-auto bg-white shadow-md flex items-center space-x-4">
-        <div>
-          <Link to="team" className="text-md font-medium text-black"> Our Team </Link>
-        </div>
-        <div>
-          <Link to="lessons" className="text-md font-medium text-black"> Lessons </Link>
-        </div>
-        <div>
-          <Link to="admin" className="text-md font-medium text-black"> Admin </Link>
-        </div>
-      </div>
-      <body>
+
+      <body className="">
         <Outlet />
         <LiveReload />
       </body>

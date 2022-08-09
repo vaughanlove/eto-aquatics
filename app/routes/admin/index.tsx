@@ -10,7 +10,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({request}) => {
   const data: LoaderData = {
-      lessons: await db.lesson.findMany({include: {award: true, times: true}}),
+      lessons: await db.lesson.findMany({include: {award: true, times: true, swimmers: true}}),
   };
   return json(data);
   };
@@ -19,16 +19,18 @@ export default function AdminIndexRoute() {
   const data = useLoaderData<LoaderData>();
 
   return (
-    <div className="container p-12">
-      <div>
+    <div className="container mx-auto px-4">
+      <div className="text-center">
         <h1 className="text-xl font-medium ">Admin Dashboard</h1>
-        <Link className="text-l  text-red-500" to="/admin/cert"> Edit Certifications</Link>
       </div>
-      <h1 className="text-xl ">Current Lessons</h1>
-      <button><Link to="/admin/lessons/new">New Lesson</Link></button>
-      <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl space-y-2">
-        {data.lessons.map((lesson) => (<div className="rounded-md p-5 shadow-md bg-blue-200" key={lesson.id}>{lesson.award.name}<br></br> Times {lesson.times.map((timeslot)=> (<p key={timeslot.id}>{timeslot.start}</p>))}<Link className="text-right" to={"lessons/"+lesson.id}> EDIT</Link></div>))} 
-      </div>   
+      <div className="container text-center space-x-12">
+        <Link className="text-md text-blue-500" to="/admin/cert"> Edit Certifications</Link>
+        <Link className="text-md text-green-500" to="/admin/lessons/new"> Create New Lesson </Link> 
+      </div>
+      <h1 className="text-xl"> Current Lessons: </h1>
+      <div className="container flex space-x-8">
+          {data.lessons.map((lesson) => (<div className="rounded-lg basis-1/4 text-center shadow-sm bg-green-100" key={lesson.id}>{lesson.award.name} Lesson<br></br><Link className="text-right" to={"lessons/"+lesson.id}> EDIT</Link>{lesson.times[0] ? (<div> Next start: {lesson.times[0].start}</div>) : (<div></div>)}</div>))} 
+      </div>
     </div>
   );
 }
