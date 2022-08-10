@@ -54,49 +54,51 @@ export default function NewLessonRoute() {
   const data = useLoaderData<LoaderData>();
 
   return (
-    <div className="container p-12">
+    <div className="container mx-auto p-12">
       {data.isAdmin ?
       (
-      <form method="post">
-        <div>
-          Pick Award:
-           <select name="certId">
-              {data.certs.map((c) => (<option key={c.id} value={c.id}> {c.name} </option>))}
-            </select>
-        </div>
-        <div>
-          <label>
-            Available Spots: <input type="number" name="availableSpots" />
-          </label>
-        </div>
-        <div>
-          <label>
-            (Optional) Instructor: <input type="text" name="instructor" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Class Minute Duration: <input type="number" name="classMinutes" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Total Class Hours: <input type="number" name="totalHours" />
-          </label>
-        </div>
-        <div>
-          <label>
-            Cost: $<input type="number" name="lessonCost" />
-          </label>
-        </div>
-        <div>
-          <button type="submit" className="button">
-            Create
-          </button>
-        </div>
-      </form> ) : (
-            <Link to="/login">Login</Link>
-          )
+      <div>
+        <h1 className="text-xl"> Create a New Lesson</h1>
+        <form method="post" className="container flex items-center space-x-6">
+          <div className="">
+            Pick Award:
+            <select name="certId" className="rounded">
+                {data.certs.map((c) => (<option key={c.id} value={c.id}> {c.name} </option>))}
+              </select>
+          </div>
+          <div>
+            <label>
+              Available Spots: <input className="rounded" type="number" name="availableSpots" />
+            </label>
+          </div>
+          <div>
+            <label>
+              (Optional) Instructor: <input className="rounded" type="text" name="instructor" />
+            </label>
+          </div>
+          <div>
+            <label>
+              Class Minute Duration: <input className="rounded" type="number" name="classMinutes" />
+            </label>
+          </div>
+          <div>
+            <label>
+              Total Class Hours: <input className="rounded" type="number" name="totalHours" />
+            </label>
+          </div>
+          <div>
+            <label>
+              Cost: $<input className="rounded" type="number" name="lessonCost" />
+            </label>
+          </div>
+          <div className="mt-4">
+            <button type="submit" className="border bg-blue-300 py-1 px-2 rounded-full">
+              Create
+            </button>
+          </div>
+        </form> 
+      </div>
+      ) : (<Link to="/login">Login</Link>)
     }
     </div>
   );
