@@ -24,14 +24,6 @@ export default function LessonRoute() {
     return (
       <div>
         <h2>Selected: {data.lesson.name}</h2>
-        <h3>{data.lesson.description}</h3>
-        <p>Instructor: {data.lesson.instructor}</p>
-        <p>Ages: {data.lesson.lowerAge} to {data.lesson.upperAge}</p>
-        <p>Time: {data.lesson.recurringDate}</p>
-        <p>Class Duration: {data.lesson.classMinuteDuration}</p>
-        <p>Total Hour Commitment: {data.lesson.totalDurationHours}</p>
-        <p> Cost: ${data.lesson.lessonCost} CAD</p>
-        <p>Prerequisites: {data.lesson.prerequisite}</p>
         <Link to={"/"}> Home </Link>
       </div>
     );
