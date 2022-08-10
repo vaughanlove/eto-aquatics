@@ -73,7 +73,7 @@ export default function LessonRoute() {
       return new Date(dateString).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric" })
     }
     return (
-      <div className="container  mx-auto">
+      <div className="container mx-auto">
         <h1 className="text-2xl"> Editing Lesson {data.lesson.id}</h1>
         <div className="container flex">
           <form method="post" className="">

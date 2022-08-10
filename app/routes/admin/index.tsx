@@ -33,10 +33,10 @@ export default function AdminIndexRoute() {
         <Link className="text-md text-green-500" to="/admin/lessons/new"> Create New Lesson </Link> 
       </div>
       <h1 className="text-xl py-6"> Current Lessons: </h1>
-      <div className="container flex space-x-8">
+      <div className="grid grid-flow-row-dense grid-cols-5">
           {data.lessons.map((lesson) => 
           (
-          <div className="rounded-lg basis-1/4 text-left shadow-sm bg-blue-100 p-4" key={lesson.id}>
+          <div className="rounded-lg m-4 text-left shadow-sm bg-blue-100 p-8" key={lesson.id}>
             <p className="text-lg font-medium text-center">
               {lesson.award.name} Lesson
             </p>
