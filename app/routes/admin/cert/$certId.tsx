@@ -63,28 +63,29 @@ export const action: ActionFunction = async ({
 export default function LessonRoute() {
     const data = useLoaderData<LoaderData>();
     return (
-      <div className="p-10">
+      <div className="container mx-auto p-10">
         <div >
-          <h2 className="text-lg">Selected: <span className="font-bold">{data.cert.name}</span></h2>
+          <h2 className="text-lg">Certification Selected: <span className="font-bold">{data.cert.name}</span></h2>
           <h2 className="text-lg">Description: {data.cert.description}</h2>
         </div>
+        <br></br>
         <div>
-          Prerequisites:
-          {data.cert.requiredCerts.map((cert) => (<li key={cert.id}><Link to={"/admin/cert/"+cert.id}>{cert.name} </Link>
+          {data.cert.requiredCerts.length > 0 ? (<h3>Prerequisites:</h3>) : (<h3 className="font-medium text-red-400"> No prerequisites found in database</h3>)}
           
-            <form method="post">
+          {data.cert.requiredCerts.map((cert) => (<li key={cert.id}><Link to={"/admin/cert/"+cert.id}>{cert.name} </Link><div><form method="post">
                 <div>
                   <input type="hidden" name="input_type" value="remove_prereq"/>
                   <input type="hidden" name="first" value={data.cert.id}/>
                   <input type="hidden" name="second" value={cert.id}/>
                 </div>
                 <button type="submit">remove</button>
-            </form>
+            </form></div>
+          
           </li>))}
 
         </div>
         <div>
-          Needed For:
+          {data.cert.prereqFor.length > 0 ? (<h3>Needed for:</h3>) : (<h3 className="font-medium text-red-400"> Not needed for any lesson in database</h3>)}
           {data.cert.prereqFor.map((cert) => (<li key={cert.id}><Link to={"/admin/cert/"+cert.id}>{cert.name} </Link></li>))}
         </div>
         <br></br>
@@ -93,13 +94,15 @@ export default function LessonRoute() {
                 <input type="hidden" name="input_type" value="add_prereq"/>
                 <input type="hidden" name="first" value={data.cert.id}/>
                 <div>
+                  <h2 className="text-lg">
                     Pick a prerequisite:  
-                    <select id="second" name="second">
-                        {data.certs.map((c) => (<option key={c.id} value={c.id}> {c.name} </option>))}
-                    </select>
+                  </h2>
                 </div>
                 <div>
-                    <button type="submit" className="bg-blue-200 underline">add prereq</button>
+                  <select id="second" name="second">
+                    {data.certs.map((c) => (<option key={c.id} value={c.id}> {c.name} </option>))}
+                  </select>
+                  <button type="submit" className="bg-blue-200 rounded m-4 p-1.5"> ADD </button>
                 </div>
             </form>
         </div>

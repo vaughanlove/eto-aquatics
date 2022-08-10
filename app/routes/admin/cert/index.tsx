@@ -23,12 +23,11 @@ export default function CertIndexRoute() {
     const data = useLoaderData<LoaderData>();
 
     return (
-      <div className="container">
+      <div className="container mx-auto">
         <h1 className="text-xl p-12">View/Add/Edit certifications</h1>
-        <div className="py-8 px-8 max-w-sm mx-auto bg-white rounded-xl space-y-2">
-          {data.certs.map((cert) => (<div className="rounded-md p-5 shadow-md bg-blue-200" key={cert.id}>{cert.name}<Link className="text-right" to={cert.id}> EDIT</Link></div>))} 
+        <div className="grid grid-flow-row-dense grid-cols-7">
+          {data.certs.map((cert) => (<Link className="text-center hover:bg-pink-500 hover:rounded-xl" to={cert.id}> <div className="rounded-md p-5 m-2 shadow-md bg-blue-200" key={cert.id}>{cert.name}</div></Link>))} 
         </div>
-
       </div>
     );
   }

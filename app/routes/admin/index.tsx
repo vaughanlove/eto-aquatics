@@ -33,18 +33,18 @@ export default function AdminIndexRoute() {
         <Link className="text-md text-green-500" to="/admin/lessons/new"> Create New Lesson </Link> 
       </div>
       <h1 className="text-xl py-6"> Current Lessons: </h1>
-      <div className="container flex space-x-8">
+      <div className="grid grid-flow-row-dense sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {data.lessons.map((lesson) => 
           (
-          <div className="rounded-lg basis-1/4 text-left shadow-sm bg-blue-100 p-4" key={lesson.id}>
+          <div className="rounded-lg m-4 text-left shadow-sm bg-blue-100 p-8" key={lesson.id}>
             <p className="text-lg font-medium text-center">
               {lesson.award.name} Lesson
             </p>
             <div>
-              {lesson.availableSpots - lesson.swimmers.length} spots available
+              {lesson.availableSpots - lesson.swimmers.length} spots
             </div>
             <div>
-              {lesson.times[0] ? (<div> Next Timeslot: {formatDate(lesson.times[0].start)}</div>) : (<div>No dates scheduled for lesson</div>)}
+              {lesson.times[0] ? (<div> Next Timeslot: {formatDate(lesson.times[0].start)}</div>) : (<div>No dates</div>)}
             </div>
             <div>
               {lesson.swimmers[0] ? (<div> {lesson.swimmers.length} Swimmers Enrolled: <br></br>{lesson.swimmers[0].user.username}</div>) : (<div>No one enrolled</div>)}
